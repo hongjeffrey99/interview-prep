@@ -1,0 +1,47 @@
+Depth first search and backtrack to last valid position if you hit a dead end
+pruning - reduce the search space by not going down paths known to be invalid
+no guarantee of global optimum
+
+N queens
+N x N board, return possible arrangements of board where N queens can be placed without attacking each other
+brute force - try every combination of N queens in each of N * N spots = N ^ 2 choose N
+notice - can’t place two queens in same row/column, so try one queen per row = better solution to iterate over each row and each spot in each row, which is O(N^N)
+Can backtracing be applied?
+Can we construct a partial solution? Yes, we can place a tentative arrangement of queens on the board
+Can we verify if a partial solution is invalid? Yes, we can check a partial solution to see if queens are attacking each other
+assume queens placed so far do not attack each other, so only need to check if last added queen attacks another
+better than brute force w/backtracing - loop through first row and try queen in columns 0 thru N, then second row, etc until N
+is_valid to check last queen placed
+if not valid, prune branch
+otherwise, recursively call with new incremental solution
+stop at base case, which is all queens are placed
+
+def n_queens(n, board=[]):
+    if n == len(board):
+        return 1
+    count = 0
+    for col in range(n):
+        board.append(col)
+        if is_valid(board):
+            count += n_queens(n, board)
+        board.pop()
+    return count
+
+def is_valid(board):
+    current_queen_row, current_queen_col = len(board) - 1, board[-1]
+    # Check if any queens can attack the last queen.
+    for row, col in enumerate(board[:-1]):
+        diff = abs(current_queen_col - col)
+        if diff == 0 or diff == current_queen_row - row:
+            return False
+    return True
+
+Flight Itinerary
+given unordered list of flights (origin, destination), and a starting airport, compute itinerary; if none exists, return null; all flights must be used
+greedy solution not possible, since cycles are possible
+brute force - check every permutation and verify that it’s a valid itinerary - O(n!)
+is backtracing possible?
+Can we construct a partial solution? Yes, we can build an incomplete itinerary that we can append flights to
+Can we verify if a partial sol is invalid? Yes, we check if there are no flights leaving the last destination and there are flights remaining that can be taken - all flights have to be used, so that means there’s a dead end
+Can we verify the solution is complete? Yes, if all flights are used
+sudoku??
