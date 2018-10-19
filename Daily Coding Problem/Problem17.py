@@ -42,3 +42,11 @@ def build_fs(input):
 
 def longest_absolute_path(s):
 	return len(longest_file_path(build_fs(s)))
+
+"""
+Notes:
+Challenges
+1. Realizing that a dictionary/JSON substructure would be a lot easier to subdivide
+2. Traversing that structure to place files in correct places with Boolean
+3. Filtering unfinished paths and using the key argument in max
+"""
